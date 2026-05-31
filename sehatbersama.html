@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SehatBersama</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100vw}
+body{font-family:'DM Sans',sans-serif;background:#f0fdf4}
+h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fade-in{animation:fadeIn .3s ease forwards}
+.scale-in{animation:scaleIn .22s ease forwards}
+.card-hover{transition:all .2s ease}
+.card-hover:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.progress-inner{transition:width .8s cubic-bezier(.4,0,.2,1)}
+.spinner{animation:spin .8s linear infinite;border:3px solid #86efac;border-top-color:#16a34a;border-radius:50%;display:inline-block}
+.btn-p{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;transition:all .15s}
+.btn-p:hover{background:linear-gradient(135deg,#15803d,#166534);box-shadow:0 4px 14px rgba(22,163,74,.4)}
+.nav-item{transition:all .15s;white-space:nowrap}
+.trow:hover{background:#f0fdf4}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:#86efac;border-radius:9999px}
+input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 2px #86efac}
+.noscroll::-webkit-scrollbar{display:none}
+.noscroll{-ms-overflow-style:none;scrollbar-width:none}
+.page{display:none}.page.active{display:block}
+.modal-bg{display:none;position:fixed;inset:0;z-index:50;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,.5)}
+.modal-bg.open{display:flex}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-weight:600;border-radius:12px;border:none;cursor:pointer;transition:all .15s}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-md{padding:10px 16px;font-size:14px}
+.btn-lg{padding:12px 24px;font-size:16px}
+.btn-sec{background:#f3f4f6;color:#374151}.btn-sec:hover{background:#e5e7eb}
+.btn-out{border:2px solid #16a34a;color:#16a34a;background:transparent}.btn-out:hover{background:#f0fdf4}
+.btn-dan{background:#fef2f2;color:#dc2626}.btn-dan:hover{background:#fee2e2}
+.btn-gh{background:transparent;color:#6b7280;border:none}.btn-gh:hover{background:#f3f4f6}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;font-size:12px;font-weight:600}
+.b-green{background:#dcfce7;color:#15803d}
+.b-orange{background:#ffedd5;color:#c2410c}
+.b-blue{background:#dbeafe;color:#1d4ed8}
+.b-red{background:#fee2e2;color:#b91c1c}
+.b-gray{background:#f3f4f6;color:#4b5563}
+.b-yellow{background:#fef9c3;color:#a16207}
+.b-purple{background:#f3e8ff;color:#7e22ce}
+.fi{width:100%;border:1px solid #e5e7eb;border-radius:12px;padding:10px 12px;font-size:14px;font-family:'DM Sans',sans-serif;background:#fff}
+.fi:focus{outline:none;box-shadow:0 0 0 2px #86efac}
+.fl{display:block;font-size:14px;font-weight:500;color:#374151;margin-bottom:6px}
+.toast{position:fixed;top:1rem;right:1rem;z-index:200;display:flex;align-items:center;gap:8px;color:#fff;padding:12px 16px;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.15);font-size:14px;font-weight:500;max-width:90vw;animation:fadeIn .3s ease}
+.wcard{background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.scard{background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+footer{background:#1f2937;color:#fff;text-align:center;padding:16px;font-size:14px}
+.hidden{display:none!important}
+@media(min-width:640px){#nb-brand-txt{display:inline!important}}
+</style>
+</head>
+<body>
+<div id="toasts"></div>
+
+<!-- LANDING -->
+<div id="pg-landing" class="page active">
+  <header style="background:rgba(255,255,255,.97);backdrop-filter:blur(8px);position:sticky;top:0;z-index:30;border-bottom:1px solid #f3f4f6;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+    <div style="max-width:1152px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:28px;height:28px;border-radius:10px;background:#16a34a;display:flex;align-items:center;justify-content:center;color:#fff">&#127807;</div>
+        <span style="font-family:'Outfit',sans-serif;font-weight:700;color:#1f2937">SehatBersama</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm btn-gh" onclick="nav('login')">Masuk</button>
+        <button class="btn btn-sm btn-p" onclick="nav('register')">Daftar</button>
+      </div>
+    </div>
+  </header>
+  <section style="padding:64px 16px;color:#fff;background:linear-gradient(135deg,#166534,#16a34a);text-align:center">
+    <div style="font-size:52px;margin-bottom:20px">&#127807;</div>
+    <h1 style="font-size:clamp(26px,5vw,46px);font-weight:800;margin-bottom:16px;line-height:1.2">Hidup Sehat Dimulai dari<br><span style="color:#fde047">Satu Langkah Hari Ini</span></h1>
+    <p style="color:#bbf7d0;font-size:clamp(14px,2.5vw,17px);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto">Lacak kalori, pantau nutrisi, log olahraga, dan ikuti kampanye donasi kesehatan.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+      <button class="btn btn-lg btn-gh" style="background:#fff;color:#15803d;box-shadow:0 10px 30px rgba(0,0,0,.15)" onclick="nav('register')">&#9889; Mulai Gratis</button>
+      <button class="btn btn-lg btn-out" style="border-color:#fff;color:#fff" onclick="nav('login')">Sudah punya akun?</button>
+    </div>
+  </section>
+  <section style="background:#fff;padding:32px 16px;border-bottom:1px solid #f3f4f6">
+    <div style="max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center">
+      <div><div style="font-size:26px;font-weight:800;color:#16a34a">500+</div><div style="font-size:11px;color:#6b7280">Pengguna</div></div>
+      <div><div style="font-size:26px;font-weight:800;color:#16a34a">10K+</div><div style="font-size:11px;color:#6b7280">Log Makanan</div></div>
+      <div><div style="font-size:26px;font-weight:800;color:#16a34a">5</div><div style="font-size:11px;color:#6b7280">Campaign</div></div>
+      <div><div style="font-size:26px;font-weight:800;color:#16a34a">50+</div><div style="font-size:11px;color:#6b7280">Database Makanan</div></div>
+    </div>
+  </section>
+  <section style="padding:52px 16px;background:#f9fafb">
+    <div style="max-width:1024px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:36px"><h2 style="font-size:24px;font-weight:700;color:#1f2937;margin-bottom:8px">Semua yang Kamu Butuhkan</h2><p style="color:#6b7280;font-size:14px">Fitur lengkap untuk mendukung perjalanan sehatmu</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+        <div class="card-hover wcard"><div style="font-size:30px;margin-bottom:12px">&#129385;</div><h3 style="font-weight:700;color:#1f2937;margin-bottom:4px">Tracker Makanan</h3><p style="font-size:14px;color:#6b7280">Catat asupan kalori & makronutrisi harian</p></div>
+        <div class="card-hover wcard"><div style="font-size:30px;margin-bottom:12px">&#128170;</div><h3 style="font-weight:700;color:#1f2937;margin-bottom:4px">Log Olahraga</h3><p style="font-size:14px;color:#6b7280">Pantau aktivitas fisik dan kalori terbakar</p></div>
+        <div class="card-hover wcard"><div style="font-size:30px;margin-bottom:12px">&#128202;</div><h3 style="font-weight:700;color:#1f2937;margin-bottom:4px">Dashboard Progres</h3><p style="font-size:14px;color:#6b7280">Visualisasi perkembangan kesehatan</p></div>
+        <div class="card-hover wcard"><div style="font-size:30px;margin-bottom:12px">&#10084;</div><h3 style="font-weight:700;color:#1f2937;margin-bottom:4px">Campaign Donasi</h3><p style="font-size:14px;color:#6b7280">Ikut berkontribusi dalam kampanye nutrisi</p></div>
+        <div class="card-hover wcard"><div style="font-size:30px;margin-bottom:12px">&#129518;</div><h3 style="font-weight:700;color:#1f2937;margin-bottom:4px">Kalkulator Gizi</h3><p style="font-size:14px;color:#6b7280">Hitung BMI, kalori, protein, dan kebutuhan air</p></div>
+        <div class="card-hover wcard"><div style="font-size:30px;margin-bottom:12px">&#128197;</div><h3 style="font-weight:700;color:#1f2937;margin-bottom:4px">Menu Mingguan</h3><p style="font-size:14px;color:#6b7280">Rencanakan menu makan sehat seminggu penuh</p></div>
+      </div>
+    </div>
+  </section>
+  <section style="padding:48px 16px;color:#fff;text-align:center;background:linear-gradient(135deg,#16a34a,#15803d)">
+    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px">Mulai Perjalanan Sehatmu</h2>
+    <p style="color:#bbf7d0;font-size:14px;margin-bottom:20px">Gratis selamanya.</p>
+    <button class="btn btn-lg btn-gh" style="background:#fff;color:#15803d;box-shadow:0 10px 25px rgba(0,0,0,.15)" onclick="nav('register')">&#9889; Daftar Sekarang</button>
+  </section>
+  <footer>&copy; 2026 SehatBersama.</footer>
+</div>
+
+<!-- LOGIN -->
+<div id="pg-login" class="page">
+  <div style="min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div class="fade-in" style="width:100%;max-width:380px;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.1);padding:28px">
+        <button class="btn btn-sm btn-gh" onclick="nav('landing')" style="margin-bottom:20px">&#8592; Kembali</button>
+        <div style="text-align:center;margin-bottom:24px">
+          <div style="font-size:40px;margin-bottom:12px">&#127807;</div>
+          <h2 style="font-size:22px;font-weight:700;color:#1f2937">Masuk ke Akun</h2>
+          <p style="font-size:12px;color:#9ca3af;margin-top:4px">Gunakan email &amp; password yang terdaftar</p>
+        </div>
+        <div id="login-err" class="hidden" style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:13px;padding:10px 14px;border-radius:10px;margin-bottom:14px"></div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label class="fl">Email *</label><input type="email" id="l-email" class="fi" placeholder="email@contoh.com"></div>
+          <div><label class="fl">Password *</label><input type="password" id="l-pass" class="fi" placeholder="Password kamu" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        </div>
+        <button class="btn btn-md btn-p" style="width:100%;justify-content:center;margin-top:16px" onclick="doLogin()">Masuk &#8250;</button>
+        <div style="text-align:center;margin-top:14px;font-size:14px"><span style="color:#6b7280">Belum punya akun? </span><button class="btn btn-sm btn-gh" style="color:#16a34a;font-weight:600;text-decoration:underline" onclick="nav('register')">Daftar sekarang</button></div>
+        <div style="margin-top:14px;padding:10px;background:#f9fafb;border-radius:10px;font-size:11px;color:#6b7280"><b>Demo:</b> user@sehatbersama.id / sehat123 &nbsp;|&nbsp; admin@sehatbersama.com / admin123</div>
+      </div>
+    </div>
+    <footer>&copy; 2026 SehatBersama.</footer>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="pg-register" class="page">
+  <div style="min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div class="fade-in" style="width:100%;max-width:380px;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.1);padding:28px">
+        <button class="btn btn-sm btn-gh" onclick="nav('landing')" style="margin-bottom:20px">&#8592; Kembali</button>
+        <div style="text-align:center;margin-bottom:24px">
+          <div style="font-size:40px;margin-bottom:12px">&#127807;</div>
+          <h2 style="font-size:22px;font-weight:700;color:#1f2937">Buat Akun Baru</h2>
+          <p style="font-size:12px;color:#9ca3af;margin-top:4px">Akun tersimpan permanen</p>
+        </div>
+        <div id="reg-err" class="hidden" style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:13px;padding:10px 14px;border-radius:10px;margin-bottom:14px"></div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label class="fl">Nama Lengkap *</label><input type="text" id="r-name" class="fi" placeholder="Nama kamu"></div>
+          <div><label class="fl">Email *</label><input type="email" id="r-email" class="fi" placeholder="email@contoh.com"></div>
+          <div><label class="fl">Password *</label><input type="password" id="r-pass" class="fi" placeholder="Min. 6 karakter"></div>
+          <div><label class="fl">Konfirmasi Password *</label><input type="password" id="r-conf" class="fi" placeholder="Ulangi password"></div>
+        </div>
+        <button class="btn btn-md btn-p" style="width:100%;justify-content:center;margin-top:16px" onclick="doRegister()">Daftar Sekarang &#8250;</button>
+        <div style="text-align:center;margin-top:14px;font-size:14px"><span style="color:#6b7280">Sudah punya akun? </span><button class="btn btn-sm btn-gh" style="color:#16a34a;font-weight:600;text-decoration:underline" onclick="nav('login')">Masuk</button></div>
+      </div>
+    </div>
+    <footer>&copy; 2026 SehatBersama.</footer>
+  </div>
+</div>
+
+<!-- USER LAYOUT -->
+<div id="pg-user" class="page">
+  <div style="min-height:100vh;display:flex;flex-direction:column;background:#f0fdf4">
+    <nav id="unav" style="background:linear-gradient(90deg,#166534,#16a34a);position:sticky;top:0;z-index:30;box-shadow:0 4px 14px rgba(0,0,0,.15)">
+      <div style="padding:0 12px;display:flex;align-items:center;height:56px;gap:6px">
+        <button onclick="nav('dashboard')" style="display:flex;align-items:center;gap:6px;color:#fff;font-family:'Outfit',sans-serif;font-weight:700;background:none;border:none;cursor:pointer;flex-shrink:0;margin-right:4px">
+          <div style="width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center">&#127807;</div>
+          <span id="nb-brand-txt" style="font-size:13px;display:none">SehatBersama</span>
+        </button>
+        <div class="noscroll" id="unav-links" style="display:flex;align-items:center;gap:1px;flex:1;overflow-x:auto"></div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <div id="unav-avatar" style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">BS</div>
+          <button class="btn btn-sm btn-gh" style="color:rgba(255,255,255,.75)" onclick="doLogout()">Keluar</button>
+        </div>
+      </div>
+    </nav>
+    <main style="flex:1;padding:20px 16px 24px;overflow-x:hidden;max-width:100vw">
+      <div style="margin-bottom:18px">
+        <h1 id="u-title" style="font-size:20px;font-weight:700;color:#1f2937"></h1>
+        <p id="u-sub" style="font-size:13px;color:#9ca3af;margin-top:2px"></p>
+      </div>
+      <div id="u-content"></div>
+    </main>
+    <footer>&copy; 2026 SehatBersama.</footer>
+  </div>
+</div>
+
+<!-- ADMIN LAYOUT -->
+<div id="pg-admin" class="page">
+  <div style="min-height:100vh;display:flex;flex-direction:column;background:#f8fafc">
+    <nav style="background:linear-gradient(90deg,#0f172a,#1e3a8a);position:sticky;top:0;z-index:30;box-shadow:0 4px 14px rgba(0,0,0,.2)">
+      <div style="padding:0 12px;display:flex;align-items:center;height:56px;gap:6px">
+        <button onclick="nav('admin-dashboard')" style="display:flex;align-items:center;gap:6px;color:#fff;font-family:'Outfit',sans-serif;font-weight:700;background:none;border:none;cursor:pointer;flex-shrink:0;margin-right:4px">
+          <div style="width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center">&#127807;</div>
+        </button>
+        <span class="badge b-blue" style="flex-shrink:0">Admin</span>
+        <div class="noscroll" id="anav-links" style="display:flex;align-items:center;gap:1px;flex:1;overflow-x:auto"></div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">AD</div>
+          <button class="btn btn-sm btn-gh" style="color:rgba(255,255,255,.75)" onclick="doLogout()">Keluar</button>
+        </div>
+      </div>
+    </nav>
+    <main style="flex:1;padding:20px 16px 24px">
+      <div style="margin-bottom:18px"><h1 id="a-title" style="font-size:20px;font-weight:700;color:#1f2937"></h1></div>
+      <div id="a-content"></div>
+    </main>
+    <footer>&copy; 2026 SehatBersama.</footer>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="scale-in" id="modal-box" style="background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:100%;max-width:440px;max-height:90vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #f3f4f6;position:sticky;top:0;background:#fff;border-radius:20px 20px 0 0;z-index:1">
+      <h3 id="modal-title" style="font-size:17px;font-weight:700;color:#1f2937"></h3>
+      <button onclick="closeModal()" style="padding:4px 8px;border-radius:8px;background:none;border:none;cursor:pointer;color:#9ca3af;font-size:20px;line-height:1">&times;</button>
+    </div>
+    <div id="modal-body" style="padding:20px"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATIC DATA
+// ============================================================
+const TODAY = new Date().toISOString().split('T')[0];
+const YDAY  = new Date(Date.now()-864e5).toISOString().split('T')[0];
+
+const USERS = [
+  {id:'u1',email:'user@sehatbersama.id',password:'sehat123',name:'Budi Santoso',role:'user',avatar:'BS'},
+  {id:'u2',email:'admin@sehatbersama.com',password:'admin123',name:'Admin SehatBersama',role:'admin',avatar:'AD'},
+  {id:'u2b',email:'admin@sehatbersama.id',password:'admin2026',name:'Admin SehatBersama',role:'admin',avatar:'AD'},
+  {id:'u3',email:'sari@sehatbersama.id',password:'sari123',name:'Sari Dewi',role:'user',avatar:'SD'},
+];
+const FOODS0 = [
+  {id:'f1',name:'Nasi Putih',cat:'Karbohidrat',srv:100,cal:130,prot:2.7,carb:28,fat:0.3,hp:false},
+  {id:'f2',name:'Dada Ayam Panggang',cat:'Protein',srv:100,cal:165,prot:31,carb:0,fat:3.6,hp:true},
+  {id:'f3',name:'Telur Rebus',cat:'Protein',srv:50,cal:78,prot:6,carb:0.6,fat:5,hp:true},
+  {id:'f4',name:'Tempe Goreng',cat:'Protein',srv:50,cal:100,prot:9,carb:6,fat:6,hp:true},
+  {id:'f5',name:'Tahu Goreng',cat:'Protein',srv:50,cal:70,prot:5,carb:3,fat:5,hp:true},
+  {id:'f6',name:'Ikan Salmon',cat:'Protein',srv:100,cal:208,prot:20,carb:0,fat:13,hp:true},
+  {id:'f7',name:'Brokoli Rebus',cat:'Sayuran',srv:100,cal:35,prot:2.4,carb:7,fat:0.4,hp:false},
+  {id:'f8',name:'Pisang',cat:'Buah',srv:118,cal:105,prot:1.3,carb:27,fat:0.3,hp:false},
+  {id:'f9',name:'Susu Sapi',cat:'Protein',srv:200,cal:122,prot:6.3,carb:10,fat:5,hp:true},
+  {id:'f10',name:'Kacang Almond',cat:'Camilan',srv:30,cal:170,prot:6,carb:6,fat:15,hp:true},
+  {id:'f11',name:'Nasi Merah',cat:'Karbohidrat',srv:100,cal:111,prot:2.6,carb:23,fat:0.9,hp:false},
+  {id:'f12',name:'Ikan Tuna Kaleng',cat:'Protein',srv:85,cal:109,prot:25,carb:0,fat:2.5,hp:true},
+  {id:'f13',name:'Oatmeal',cat:'Karbohidrat',srv:80,cal:307,prot:11,carb:55,fat:5,hp:false},
+  {id:'f14',name:'Greek Yogurt',cat:'Protein',srv:150,cal:130,prot:18,carb:7,fat:4,hp:true},
+  {id:'f15',name:'Bayam',cat:'Sayuran',srv:100,cal:29,prot:3,carb:2.8,fat:0.5,hp:false},
+  {id:'f16',name:'Ubi Rebus',cat:'Karbohidrat',srv:100,cal:90,prot:2,carb:21,fat:0.1,hp:false},
+  {id:'f17',name:'Daging Sapi Panggang',cat:'Protein',srv:100,cal:217,prot:26,carb:0,fat:12,hp:true},
+  {id:'f18',name:'Jeruk',cat:'Buah',srv:131,cal:62,prot:1.2,carb:15,fat:0.2,hp:false},
+  {id:'f19',name:'Edamame',cat:'Protein',srv:100,cal:121,prot:11,carb:9,fat:5,hp:true},
+  {id:'f20',name:'Soto Ayam',cat:'Makanan Tradisional',srv:350,cal:290,prot:18,carb:28,fat:11,hp:true},
+];
+const WEEKLY_C=[{d:'Sen',k:1750,t:1823},{d:'Sel',k:1920,t:1823},{d:'Rab',k:1680,t:1823},{d:'Kam',k:1820,t:1823},{d:'Jum',k:2050,t:1823},{d:'Sab',k:1600,t:1823},{d:'Min',k:1780,t:1823}];
+const WEIGHT_C=[{w:'Mg 1',b:74.2},{w:'Mg 2',b:73.8},{w:'Mg 3',b:73.1},{w:'Mg 4',b:72.6},{w:'Mg 5',b:72.0},{w:'Mg 6',b:71.5}];
+const ACT_C=[{d:'Sen',u:25,f:118},{d:'Sel',u:31,f:145},{d:'Rab',u:28,f:132},{d:'Kam',u:34,f:158},{d:'Jum',u:29,f:139},{d:'Sab',u:22,f:97},{d:'Min',u:18,f:76}];
+const EXLIST=['Lari','Bersepeda','Renang','Yoga','Push Up','Sit Up','Pull Up','Squat','Plank','Jumping Jack','Zumba','Badminton','Futsal','Basket','HIIT','Jalan Kaki'];
+const DAYS={mon:'Senin',tue:'Selasa',wed:'Rabu',thu:'Kamis',fri:'Jumat',sat:'Sabtu',sun:'Minggu'};
+const MEALS={breakfast:'&#127749; Sarapan',lunch:'&#9728; Makan Siang',dinner:'&#127769; Makan Malam',snack:'&#127822; Camilan'};
+
+// ============================================================
+// APP STATE
+// ============================================================
+const S = {
+  user:null, page:'landing', params:{},
+  profile:{weight:72,height:170,age:28,gender:'L',goal:'lose',actLevel:'moderate',bmi:24.9,bmr:1756,dailyCal:1823,dailyProt:130,dailyWater:2520},
+  foods: JSON.parse(JSON.stringify(FOODS0)),
+  foodLogs:[
+    {id:'fl1',uid:'u1',name:'Nasi Putih',wg:150,cal:195,prot:4.1,carb:42,fat:0.45,meal:'lunch',date:TODAY},
+    {id:'fl2',uid:'u1',name:'Dada Ayam Panggang',wg:120,cal:198,prot:37.2,carb:0,fat:4.32,meal:'lunch',date:TODAY},
+    {id:'fl3',uid:'u1',name:'Oatmeal',wg:80,cal:307,prot:11,carb:55,fat:5,meal:'breakfast',date:TODAY},
+    {id:'fl4',uid:'u1',name:'Susu Sapi',wg:200,cal:122,prot:6.3,carb:10,fat:5,meal:'breakfast',date:TODAY},
+  ],
+  exLogs:[
+    {id:'el1',uid:'u1',name:'Lari Pagi',type:'cardio',dur:30,burned:240,int:'medium',date:TODAY},
+    {id:'el2',uid:'u1',name:'Push Up',type:'strength',dur:15,burned:90,int:'high',date:TODAY},
+    {id:'el3',uid:'u1',name:'Bersepeda',type:'cardio',dur:45,burned:320,int:'medium',date:YDAY},
+  ],
+  waterLogs:[
+    {id:'wl1',uid:'u1',ml:250,date:TODAY},
+    {id:'wl2',uid:'u1',ml:250,date:TODAY},
+    {id:'wl3',uid:'u1',ml:350,date:TODAY},
+  ],
+  campaigns:[
+    {id:'c1',title:'Bantuan Nutrisi Anak Gaza',desc:'Penyediaan makanan bergizi tinggi protein bagi anak-anak di Gaza yang mengalami kekurangan gizi akibat konflik berkepanjangan.',benName:'Anak-anak Gaza, Palestina',benLoc:'Gaza, Palestina',start:'2026-05-01',end:'2026-08-01',link:'https://kitabisa.com/bantuan-nutrisi-gaza',status:'active',img:'&#127477;&#127480;',cat:'Nutrisi Anak'},
+    {id:'c2',title:'Makan Bergizi untuk Lansia Dhuafa',desc:'Program pemberian makanan bergizi seimbang untuk 50 lansia kurang mampu di Jabodetabek.',benName:'Yayasan Lansia Bahagia',benLoc:'Jakarta Selatan',start:'2026-05-15',end:'2026-07-15',link:'https://kitabisa.com/makan-bergizi-lansia',status:'active',img:'&#128116;',cat:'Lansia'},
+    {id:'c3',title:'Program PMT Balita Stunting',desc:'Pemberian Makanan Tambahan berkualitas tinggi untuk 100 balita stunting di Lombok Timur.',benName:'Balita Desa Pringgabaya',benLoc:'Lombok Timur, NTB',start:'2026-04-01',end:'2026-06-30',link:'https://kitabisa.com/pmt-balita-stunting',status:'active',img:'&#128118;',cat:'Balita'},
+    {id:'c4',title:'Dapur Sehat Pesantren Terpencil',desc:'Membangun fasilitas dapur dan menyediakan bahan makanan bergizi untuk 200 santri di pesantren terpencil.',benName:'Pesantren Al-Hikmah',benLoc:'Garut, Jawa Barat',start:'2026-06-01',end:'2026-09-01',link:'https://kitabisa.com/dapur-sehat-pesantren',status:'approved',img:'&#127978;',cat:'Pendidikan'},
+    {id:'c5',title:'Suplemen Ibu Hamil Kurang Mampu',desc:'Penyediaan suplemen kehamilan untuk 75 ibu hamil dari keluarga tidak mampu di wilayah Bekasi.',benName:'Ibu Hamil Rawan Gizi Bekasi',benLoc:'Bekasi, Jawa Barat',start:'2026-06-10',end:'2026-08-10',link:'',status:'pending',img:'&#129168;',cat:'Ibu Hamil'},
+  ],
+  articles:[
+    {id:'a1',title:'5 Tips Meningkatkan Asupan Protein Harian',excerpt:'Protein penting untuk pemulihan otot dan rasa kenyang.',cat:'Nutrisi',tags:['protein','gizi'],status:'published',views:1234,date:'2026-05-20'},
+    {id:'a2',title:'Mengenal BMI dan Cara Membacanya',excerpt:'BMI adalah indikator kesehatan sederhana yang penting diketahui.',cat:'Kesehatan Umum',tags:['bmi'],status:'published',views:987,date:'2026-05-18'},
+    {id:'a3',title:'Olahraga Ringan 30 Menit untuk Pemula',excerpt:'30 menit olahraga sederhana yang efektif untuk memulai gaya hidup aktif.',cat:'Olahraga',tags:['olahraga'],status:'published',views:2100,date:'2026-05-15'},
+    {id:'a4',title:'Draft: Karbohidrat Kompleks vs Sederhana',excerpt:'Tidak semua karbohidrat diciptakan sama.',cat:'Nutrisi',tags:['karbohidrat'],status:'draft',views:0,date:null},
+  ],
+  comments:[
+    {id:'cm1',uid:'u3',uname:'Sari Dewi',type:'campaign',tid:'c1',content:'Semoga campaign ini cepat terkumpul!',status:'pending',at:'2026-05-28 09:15'},
+    {id:'cm2',uid:'u3',uname:'Sari Dewi',type:'article',tid:'a1',content:'Artikel sangat bermanfaat!',status:'approved',at:'2026-05-27 14:30'},
+  ],
+  menu:{
+    mon:{breakfast:'Oatmeal + Susu',lunch:'Nasi + Ayam + Brokoli',dinner:'Sup Ayam + Nasi Merah',snack:'Almond + Yogurt'},
+    tue:{breakfast:'Telur Dadar + Roti',lunch:'Nasi + Ikan Salmon',dinner:'Tempe + Tahu + Nasi',snack:'Buah Potong'},
+    wed:{breakfast:'Bubur Oat + Pisang',lunch:'Soto Ayam',dinner:'Gado-gado',snack:'Kacang Almond'},
+    thu:{breakfast:'Smoothie Pisang',lunch:'Nasi + Dada Ayam',dinner:'Tahu + Sayur Tumis',snack:'Greek Yogurt'},
+    fri:{breakfast:'Nasi Goreng + Telur',lunch:'Bakso + Mie',dinner:'Ikan Bakar + Nasi',snack:'Edamame'},
+    sat:{breakfast:'Pancake Oat',lunch:'Nasi Padang Sehat',dinner:'Ayam Bakar + Ubi',snack:'Buah Segar'},
+    sun:{breakfast:'Bubur Ayam',lunch:'Nasi + Rendang Sehat',dinner:'Sup Sayur + Tahu',snack:'Pisang + Susu'},
+  },
+  extraUsers:[],
+};
+
+// Restore session
+try{
+  const sess=localStorage.getItem('sb:sess');
+  if(sess){const u=JSON.parse(sess);const f=USERS.find(x=>x.id===u.id&&x.email===u.email);if(f)S.user=f;}
+  const eu=localStorage.getItem('sb:users');
+  if(eu)S.extraUsers=JSON.parse(eu);
+}catch(e){}
+
+// ============================================================
+// CALC
+// ============================================================
+const C={
+  bmi:(w,h)=>+(w/((h/100)**2)).toFixed(1),
+  bmr:(w,h,a,g)=>g==='L'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161,
+  tdee:(b,al)=>{const m={sedentary:1.2,light:1.375,moderate:1.55,active:1.725,veryActive:1.9};return Math.round(b*(m[al]||1.55));},
+  cal:(t,g)=>g==='lose'?t-500:g==='gain'?t+500:t,
+  prot:(w,al)=>{const m={sedentary:1.2,light:1.4,moderate:1.6,active:1.8,veryActive:2.2};return Math.round(w*(m[al]||1.6));},
+  water:w=>Math.round(w*35),
+  bmiLbl:b=>b<18.5?'Kurus':b<25?'Normal':b<30?'Berlebih':'Obesitas',
+  bmiClr:b=>b<18.5?'#3b82f6':b<25?'#16a34a':b<30?'#f97316':'#ef4444',
+};
+const sum=(arr,k)=>arr.reduce((s,x)=>s+(x[k]||0),0);
+const tFL=()=>S.foodLogs.filter(l=>l.uid===S.user?.id&&l.date===TODAY);
+const tEX=()=>S.exLogs.filter(l=>l.uid===S.user?.id&&l.date===TODAY);
+const tWL=()=>S.waterLogs.filter(l=>l.uid===S.user?.id&&l.date===TODAY);
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function toast(msg,type='success'){
+  const c={success:'#16a34a',error:'#ef4444',info:'#3b82f6',warning:'#f97316'}[type]||'#16a34a';
+  const el=document.createElement('div');
+  el.className='toast'; el.style.background=c; el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(),3200);
+}
+const bdg=(txt,c='green')=>`<span class="badge b-${c}">${txt}</span>`;
+const pb=(v,mx,clr='#16a34a',h='10px')=>{
+  const p=Math.min(100,Math.round((v/(mx||1))*100));
+  return `<div style="width:100%;background:#f3f4f6;border-radius:9999px;overflow:hidden;height:${h}"><div class="progress-inner" style="height:${h};border-radius:9999px;background:${clr};width:${p}%"></div></div>`;
+};
+function openModal(title,html){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=html;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-body').innerHTML='';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const UNAV=[
+  {p:'dashboard',i:'&#127968;',l:'Dashboard'},
+  {p:'profil',i:'&#128100;',l:'Profil'},
+  {p:'makanan',i:'&#127869;',l:'Tracker'},
+  {p:'database',i:'&#128209;',l:'Database'},
+  {p:'menu',i:'&#128197;',l:'Menu'},
+  {p:'olahraga',i:'&#127947;',l:'Olahraga'},
+  {p:'scanner',i:'&#128269;',l:'Scanner'},
+  {p:'donasi',i:'&#10084;',l:'Donasi'},
+];
+const ANAV=[
+  {p:'admin-dashboard',i:'&#128202;',l:'Dashboard'},
+  {p:'admin-makanan',i:'&#127869;',l:'Makanan'},
+  {p:'admin-artikel',i:'&#128196;',l:'Artikel'},
+  {p:'admin-menu',i:'&#128203;',l:'Atur Menu'},
+  {p:'admin-moderasi',i:'&#128737;',l:'Moderasi'},
+  {p:'admin-donasi',i:'&#10084;',l:'Donasi'},
+];
+
+function nav(page,params={}){
+  S.page=page; S.params=params; window.scrollTo(0,0); render();
+}
+
+function render(){
+  const p=S.page, u=S.user;
+  if(!u&&!['landing','login','register'].includes(p)){nav('login');return;}
+  if(u&&['landing','login','register'].includes(p)){nav(u.role==='admin'?'admin-dashboard':'dashboard');return;}
+  if(u&&u.role!=='admin'&&p.startsWith('admin')){nav('dashboard');return;}
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  if(p==='landing') document.getElementById('pg-landing').classList.add('active');
+  else if(p==='login') document.getElementById('pg-login').classList.add('active');
+  else if(p==='register') document.getElementById('pg-register').classList.add('active');
+  else if(u?.role==='admin'){
+    document.getElementById('pg-admin').classList.add('active');
+    buildNav('anav-links',ANAV,p);
+    renderAdminPage(p);
+  } else if(u){
+    document.getElementById('pg-user').classList.add('active');
+    document.getElementById('unav-avatar').textContent=u.avatar||'U';
+    buildNav('unav-links',UNAV,p);
+    renderUserPage(p);
+  }
+}
+
+function buildNav(cid,items,active){
+  document.getElementById(cid).innerHTML=items.map(n=>`<button class="nav-item" onclick="nav('${n.p}')"
+    style="display:flex;align-items:center;gap:3px;padding:6px 9px;border-radius:8px;font-size:11px;font-weight:500;border:none;cursor:pointer;
+    background:${active===n.p?'rgba(255,255,255,.2)':'transparent'};
+    color:${active===n.p?'#fff':'rgba(255,255,255,.75)'}"
+  >${n.i} ${n.l}</button>`).join('');
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function doLogin(){
+  const email=(document.getElementById('l-email').value||'').trim().toLowerCase();
+  const pass=document.getElementById('l-pass').value;
+  if(!email||!pass){showErr('login-err','Email dan password wajib.');return;}
+  const all=[...USERS,...S.extraUsers];
+  const u=all.find(x=>x.email.toLowerCase()===email&&x.password===pass);
+  if(u){
+    S.user=u;
+    try{localStorage.setItem('sb:sess',JSON.stringify(u));}catch(e){}
+    toast('Selamat datang, '+u.name+'!');
+    nav(u.role==='admin'?'admin-dashboard':'dashboard');
+  } else showErr('login-err','Email atau password salah.');
+}
+function doRegister(){
+  const name=(document.getElementById('r-name').value||'').trim();
+  const email=(document.getElementById('r-email').value||'').trim();
+  const pass=document.getElementById('r-pass').value;
+  const conf=document.getElementById('r-conf').value;
+  if(!name||!email||!pass){showErr('reg-err','Semua field wajib diisi.');return;}
+  if(pass!==conf){showErr('reg-err','Password tidak cocok.');return;}
+  if(pass.length<6){showErr('reg-err','Password minimal 6 karakter.');return;}
+  const all=[...USERS,...S.extraUsers];
+  if(all.find(x=>x.email.toLowerCase()===email.toLowerCase())){showErr('reg-err','Email sudah terdaftar.');return;}
+  const nu={id:'u_'+Date.now(),email,password:pass,name,role:'user',avatar:name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2)};
+  S.extraUsers.push(nu);
+  try{localStorage.setItem('sb:users',JSON.stringify(S.extraUsers));}catch(e){}
+  toast('Akun berhasil dibuat! Silakan login.');
+  nav('login');
+}
+function doLogout(){
+  S.user=null;
+  try{localStorage.removeItem('sb:sess');}catch(e){}
+  nav('landing');
+}
+function showErr(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.classList.remove('hidden');}}
+
+// ============================================================
+// USER PAGES
+// ============================================================
+const uc=()=>document.getElementById('u-content');
+function setUTitle(t,s=''){document.getElementById('u-title').textContent=t;document.getElementById('u-sub').textContent=s;}
+function renderUserPage(p){
+  const m={dashboard:pgDashboard,profil:pgProfil,makanan:pgMakanan,database:pgDatabase,menu:pgMenu,olahraga:pgOlahraga,scanner:pgScanner,donasi:pgDonasi,'donasi-detail':pgDonasiDetail};
+  (m[p]||function(el){el.innerHTML='<p>404</p>';})(uc());
+}
+
+// --- DASHBOARD ---
+function pgDashboard(el){
+  const f=tFL(),e=tEX(),w=tWL();
+  const cal=sum(f,'cal'),prot=sum(f,'prot'),carb=sum(f,'carb'),fat=sum(f,'fat'),water=sum(w,'ml'),burned=sum(e,'burned');
+  const pr=S.profile,u=S.user;
+  setUTitle('Halo, '+u.name.split(' ')[0]+' &#128521;',new Date().toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'}));
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+${[{ic:'&#128293;',lb:'Kalori Masuk',v:Math.round(cal),s:'Target '+pr.dailyCal+' kkal',brd:'#f97316'},
+   {ic:'&#9889;',lb:'BMI',v:pr.bmi,s:C.bmiLbl(pr.bmi),brd:'#16a34a'},
+   {ic:'&#128167;',lb:'Air Minum',v:water+'ml',s:'Target '+pr.dailyWater+'ml',brd:'#3b82f6'},
+   {ic:'&#127939;',lb:'Terbakar',v:burned+' kkal',s:'hari ini',brd:'#a855f7'}
+].map(s=>`<div class="card-hover scard" style="border-left:4px solid ${s.brd}">
+  <div style="font-size:22px;margin-bottom:4px">${s.ic}</div>
+  <div style="font-size:19px;font-weight:700;color:#1f2937">${s.v}</div>
+  <div style="font-size:11px;color:#6b7280">${s.lb}</div>
+  <div style="font-size:11px;color:#9ca3af;margin-top:2px">${s.s}</div>
+</div>`).join('')}
+</div>
+
+<div class="wcard">
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:14px">Target Harian</h3>
+  <div style="display:flex;flex-direction:column;gap:12px">
+  ${[{lb:'Kalori',v:Math.round(cal),mx:pr.dailyCal,u:'kkal',c:'#f97316'},
+     {lb:'Protein',v:Math.round(prot),mx:pr.dailyProt,u:'g',c:'#16a34a'},
+     {lb:'Air',v:water,mx:pr.dailyWater,u:'ml',c:'#3b82f6'}].map(s=>`<div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
+      <span style="font-weight:500;color:#374151">${s.lb}</span>
+      <span style="color:#9ca3af">${s.v} / ${s.mx} ${s.u}</span>
+    </div>${pb(s.v,s.mx,s.c,'11px')}</div>`).join('')}
+  </div>
+</div>
+
+<div class="wcard">
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:14px">Kalori 7 Hari Terakhir</h3>
+  <canvas id="wk-chart" style="max-height:180px"></canvas>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<div class="wcard">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <h3 style="font-weight:700;color:#1f2937;font-size:14px">Makanan Hari Ini</h3>
+    <button class="btn btn-sm btn-p" onclick="nav('makanan')">+ Tambah</button>
+  </div>
+  ${f.length===0?'<div style="padding:20px 0;text-align:center;color:#9ca3af;font-size:13px">&#127869; Belum ada catatan</div>':
+    f.slice(0,4).map(l=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f9fafb">
+      <div><div style="font-size:12px;font-weight:500;color:#374151">${l.name}</div><div style="font-size:11px;color:#9ca3af">${l.wg}g</div></div>
+      ${bdg(Math.round(l.cal)+' kkal','orange')}
+    </div>`).join('')+(f.length>4?`<div style="font-size:11px;text-align:center;color:#9ca3af;padding-top:5px">+${f.length-4} lainnya</div>`:'')}
+</div>
+<div class="wcard">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <h3 style="font-weight:700;color:#1f2937;font-size:14px">Olahraga Hari Ini</h3>
+    <button class="btn btn-sm btn-p" onclick="nav('olahraga')">+ Tambah</button>
+  </div>
+  ${e.length===0?'<div style="padding:20px 0;text-align:center;color:#9ca3af;font-size:13px">&#127939; Belum ada olahraga</div>':
+    e.map(x=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f9fafb">
+      <div><div style="font-size:12px;font-weight:500;color:#374151">${x.name}</div><div style="font-size:11px;color:#9ca3af">${x.dur} menit</div></div>
+      ${bdg(x.burned+' kkal','purple')}
+    </div>`).join('')}
+</div>
+</div>
+
+<div class="wcard">
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:14px">Progres Berat Badan</h3>
+  <canvas id="wt-chart" style="max-height:150px"></canvas>
+</div>
+</div>`;
+  setTimeout(()=>{
+    try{new Chart(document.getElementById('wk-chart'),{type:'line',data:{labels:WEEKLY_C.map(d=>d.d),datasets:[{label:'Kalori',data:WEEKLY_C.map(d=>d.k),borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.1)',tension:.4,fill:true,pointRadius:3},{label:'Target',data:WEEKLY_C.map(d=>d.t),borderColor:'#f97316',borderDash:[4,4],tension:.4,pointRadius:0,borderWidth:1.5}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f1f5f9'}}}}});}catch(e){}
+    try{new Chart(document.getElementById('wt-chart'),{type:'line',data:{labels:WEIGHT_C.map(d=>d.w),datasets:[{label:'Berat (kg)',data:WEIGHT_C.map(d=>d.b),borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.08)',tension:.4,pointBackgroundColor:'#16a34a',pointRadius:4,fill:true}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:69,max:76,grid:{color:'#f1f5f9'}}}}});}catch(e){}
+  },80);
+}
+
+// --- PROFIL ---
+function pgProfil(el){
+  setUTitle('Profil Kesehatan','Data tubuh & kalkulasi otomatis');
+  const p=S.profile;
+  const alOpts=[['sedentary','Sedentary'],['light','Light (1-3x/mgg)'],['moderate','Moderate (3-5x/mgg)'],['active','Active (6-7x/mgg)'],['veryActive','Very Active']];
+  el.innerHTML=`<div class="fade-in" style="max-width:720px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr;gap:16px">
+<div class="wcard">
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:16px">&#128100; Data Tubuh</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div><label class="fl">Berat (kg)*</label><input type="number" id="p-w" class="fi" value="${p.weight}" min="20" max="300" step="0.1"></div>
+    <div><label class="fl">Tinggi (cm)*</label><input type="number" id="p-h" class="fi" value="${p.height}" min="100" max="250"></div>
+    <div><label class="fl">Usia*</label><input type="number" id="p-a" class="fi" value="${p.age}" min="10" max="120"></div>
+    <div><label class="fl">Jenis Kelamin</label><select id="p-g" class="fi"><option value="L" ${p.gender==='L'?'selected':''}>Laki-laki</option><option value="P" ${p.gender==='P'?'selected':''}>Perempuan</option></select></div>
+    <div><label class="fl">Target</label><select id="p-goal" class="fi"><option value="lose" ${p.goal==='lose'?'selected':''}>Turunkan Berat</option><option value="maintain" ${p.goal==='maintain'?'selected':''}>Pertahankan</option><option value="gain" ${p.goal==='gain'?'selected':''}>Naikkan Berat</option></select></div>
+    <div><label class="fl">Level Aktivitas</label><select id="p-al" class="fi">${alOpts.map(o=>`<option value="${o[0]}" ${p.actLevel===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div>
+  </div>
+  <button class="btn btn-md btn-p" style="margin-top:16px" onclick="saveProfil()">&#128190; Simpan &amp; Hitung Ulang</button>
+</div>
+<div class="wcard">
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:14px;font-size:13px">Hasil Kalkulasi</h3>
+  <div style="display:flex;flex-direction:column;gap:11px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:#6b7280">BMI</span><div style="text-align:right"><div style="font-weight:700;font-size:13px;color:${C.bmiClr(p.bmi)}">${p.bmi}</div><div style="font-size:11px;font-weight:500;color:${C.bmiClr(p.bmi)}">${C.bmiLbl(p.bmi)}</div></div></div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6b7280">BMR</span><span style="font-weight:700;font-size:13px;color:#374151">${Math.round(p.bmr)} kkal</span></div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6b7280">Target Kalori</span><span style="font-weight:700;font-size:13px;color:#f97316">${Math.round(p.dailyCal)} kkal/hari</span></div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6b7280">Target Protein</span><span style="font-weight:700;font-size:13px;color:#16a34a">${p.dailyProt}g/hari</span></div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6b7280">Target Air</span><span style="font-weight:700;font-size:13px;color:#3b82f6">${p.dailyWater}ml/hari</span></div>
+  </div>
+</div>
+</div>`;
+}
+function saveProfil(){
+  const w=+document.getElementById('p-w').value,h=+document.getElementById('p-h').value,a=+document.getElementById('p-a').value;
+  if(!w||!h||!a){toast('Lengkapi semua data!','error');return;}
+  const g=document.getElementById('p-g').value,goal=document.getElementById('p-goal').value,al=document.getElementById('p-al').value;
+  const bmi=C.bmi(w,h),bmr=C.bmr(w,h,a,g),tdee=C.tdee(bmr,al);
+  S.profile={...S.profile,weight:w,height:h,age:a,gender:g,goal,actLevel:al,bmi,bmr:Math.round(bmr),dailyCal:C.cal(tdee,goal),dailyProt:C.prot(w,al),dailyWater:C.water(w)};
+  toast('Profil berhasil diperbarui!');
+  pgProfil(uc());
+}
+
+// --- MAKANAN ---
+let _fManual=false,_fMeal='lunch',_fSel=null;
+function pgMakanan(el){
+  setUTitle('Tracker Makanan','Catat asupan harianmu');
+  const f=tFL(),p=S.profile;
+  const cal=sum(f,'cal'),prot=sum(f,'prot'),water=sum(tWL(),'ml');
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:14px">
+<div class="wcard" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px">
+${[{l:'Kalori',v:Math.round(cal),mx:p.dailyCal,u:'kkal',c:'#f97316'},
+   {l:'Protein',v:Math.round(prot),mx:p.dailyProt,u:'g',c:'#16a34a'},
+   {l:'Air',v:water,mx:p.dailyWater,u:'ml',c:'#3b82f6'}].map(s=>`<div>
+  <div style="font-size:11px;color:#9ca3af;margin-bottom:2px">${s.l}</div>
+  <div style="font-size:17px;font-weight:700;color:${s.c}">${s.v}<span style="font-size:10px;color:#9ca3af;font-weight:400">/${s.mx}${s.u}</span></div>
+  ${pb(s.v,s.mx,s.c,'6px')}
+</div>`).join('')}
+</div>
+<div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+  <button class="btn btn-md btn-p" onclick="openFModal(false,'lunch')">+ Dari Database</button>
+  <button class="btn btn-md btn-sec" onclick="openFModal(true,'lunch')">+ Input Manual</button>
+  ${[150,200,250,350].map(ml=>`<button onclick="addWater(${ml})" style="padding:5px 10px;border-radius:8px;border:1px solid #bfdbfe;color:#2563eb;font-size:12px;font-weight:500;cursor:pointer;background:#fff">+${ml}ml</button>`).join('')}
+</div>
+${Object.entries(MEALS).map(([type,lbl])=>{
+  const items=f.filter(x=>x.meal===type);
+  return `<div class="wcard" style="padding:0;overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid #f9fafb">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:18px">${lbl.split(' ')[0]}</span>
+      <h3 style="font-weight:700;color:#1f2937;font-size:13px">${lbl.split(' ').slice(1).join(' ')}</h3>
+      ${items.length?bdg(Math.round(sum(items,'cal'))+' kkal','orange'):''}
+    </div>
+    <button class="btn btn-sm btn-gh" onclick="openFModal(false,'${type}')">+ Tambah</button>
+  </div>
+  ${items.length===0?'<div style="padding:18px;text-align:center;font-size:13px;color:#9ca3af">Belum ada catatan</div>':
+    `<div>${items.map(lg=>`<div class="trow" style="display:flex;align-items:center;justify-content:space-between;padding:9px 15px;border-bottom:1px solid #f9fafb">
+    <div style="min-width:0;flex:1"><div style="font-size:13px;font-weight:500;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${lg.name}</div><div style="font-size:11px;color:#9ca3af">${lg.wg}g &middot; P:${lg.prot}g</div></div>
+    <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;margin-left:7px">
+      <span style="font-size:13px;font-weight:700;color:#ea580c">${Math.round(lg.cal)}</span>
+      <button onclick="delFL('${lg.id}')" style="color:#d1d5db;background:none;border:none;cursor:pointer;font-size:13px">&#128465;</button>
+    </div>
+  </div>`).join('')}</div>`}
+</div>`;}).join('')}
+</div>`;
+}
+function openFModal(manual,meal){
+  _fManual=manual; _fMeal=meal||'lunch'; _fSel=null;
+  const msel=`<div style="margin-bottom:11px"><label class="fl">Sesi Makan</label>
+<select id="fm-meal" class="fi">
+  <option value="breakfast" ${_fMeal==='breakfast'?'selected':''}>Sarapan</option>
+  <option value="lunch" ${_fMeal==='lunch'?'selected':''}>Makan Siang</option>
+  <option value="dinner" ${_fMeal==='dinner'?'selected':''}>Makan Malam</option>
+  <option value="snack" ${_fMeal==='snack'?'selected':''}>Camilan</option>
+</select></div>`;
+  let body;
+  if(manual){
+    body=msel+`<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px">
+<div style="grid-column:1/-1"><label class="fl">Nama Makanan*</label><input type="text" id="fm-name" class="fi" placeholder="Nama makanan"></div>
+<div><label class="fl">Kalori*</label><input type="number" id="fm-cal" class="fi" placeholder="0"></div>
+<div><label class="fl">Protein(g)</label><input type="number" id="fm-prot" class="fi" placeholder="0"></div>
+<div><label class="fl">Karbo(g)</label><input type="number" id="fm-carb" class="fi" placeholder="0"></div>
+<div><label class="fl">Lemak(g)</label><input type="number" id="fm-fat" class="fi" placeholder="0"></div>
+</div>
+<div style="margin-bottom:11px"><label class="fl">Berat Porsi (gram)</label><input type="number" id="fm-wg" class="fi" value="100" min="1"></div>
+<div style="display:flex;gap:8px">
+<button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="submitFLog()">&#10003; Tambah</button>
+<button class="btn btn-md btn-sec" onclick="closeModal()">Batal</button>
+</div>`;
+  } else {
+    const rows=S.foods.map(f=>`<button onclick="selFood('${f.id}')" id="ff-${f.id}" style="width:100%;text-align:left;padding:7px 11px;font-size:12px;background:#fff;border:none;cursor:pointer;border-bottom:1px solid #f9fafb;display:block"><div style="font-weight:500;color:#1f2937">${f.name}</div><div style="font-size:10px;color:#9ca3af">${f.cal} kkal/${f.srv}g &middot; P:${f.prot}g</div></button>`).join('');
+    body=msel+`<div style="position:relative;margin-bottom:8px"><span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:12px">&#128269;</span><input type="text" id="fm-search" class="fi" style="padding-left:30px" placeholder="Cari makanan..." oninput="filterFM(this.value)"></div>
+<div id="fm-list" style="max-height:155px;overflow-y:auto;border:1px solid #f3f4f6;border-radius:11px;margin-bottom:9px">${rows}</div>
+<div id="fm-prev" style="display:none;background:#f0fdf4;border-radius:10px;padding:9px;font-size:12px;color:#15803d;margin-bottom:9px"></div>
+<div style="margin-bottom:11px"><label class="fl">Berat Porsi (gram)</label><input type="number" id="fm-wg" class="fi" value="100" min="1" oninput="updFMPrev()"></div>
+<div style="display:flex;gap:8px">
+<button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="submitFLog()">&#10003; Tambah</button>
+<button class="btn btn-md btn-sec" onclick="closeModal()">Batal</button>
+</div>`;
+  }
+  openModal(manual?'Input Manual':'Pilih Makanan',body);
+}
+function filterFM(q){
+  const low=q.toLowerCase();
+  const filt=S.foods.filter(f=>f.name.toLowerCase().includes(low));
+  const el=document.getElementById('fm-list');
+  if(el) el.innerHTML=filt.map(f=>`<button onclick="selFood('${f.id}')" id="ff-${f.id}" style="width:100%;text-align:left;padding:7px 11px;font-size:12px;background:#fff;border:none;cursor:pointer;border-bottom:1px solid #f9fafb;display:block"><div style="font-weight:500;color:#1f2937">${f.name}</div><div style="font-size:10px;color:#9ca3af">${f.cal} kkal/${f.srv}g &middot; P:${f.prot}g</div></button>`).join('');
+}
+function selFood(id){
+  _fSel=S.foods.find(f=>f.id===id);
+  document.querySelectorAll('[id^="ff-"]').forEach(b=>{b.style.background='#fff';b.style.fontWeight='';});
+  const btn=document.getElementById('ff-'+id);
+  if(btn){btn.style.background='#f0fdf4';btn.style.fontWeight='600';}
+  updFMPrev();
+}
+function updFMPrev(){
+  const prev=document.getElementById('fm-prev'),wEl=document.getElementById('fm-wg');
+  if(!prev||!_fSel||!wEl)return;
+  const w=+wEl.value||100,r=w/_fSel.srv;
+  prev.style.display='block';
+  prev.innerHTML=`<strong>${_fSel.name}</strong> &mdash; ${w}g &asymp; ${Math.round(_fSel.cal*r)} kkal`;
+}
+function submitFLog(){
+  const meal=document.getElementById('fm-meal')?.value||_fMeal;
+  const wg=+document.getElementById('fm-wg')?.value||100;
+  let lg;
+  if(_fManual){
+    const name=(document.getElementById('fm-name')?.value||'').trim();
+    const cal=+document.getElementById('fm-cal')?.value;
+    if(!name||!cal){toast('Nama dan kalori wajib','error');return;}
+    lg={id:'fl_'+Date.now(),uid:S.user.id,name,wg,cal,prot:+document.getElementById('fm-prot')?.value||0,carb:+document.getElementById('fm-carb')?.value||0,fat:+document.getElementById('fm-fat')?.value||0,meal,date:TODAY};
+  } else {
+    if(!_fSel){toast('Pilih makanan terlebih dahulu','error');return;}
+    const r=wg/_fSel.srv;
+    lg={id:'fl_'+Date.now(),uid:S.user.id,name:_fSel.name,wg,cal:+(_fSel.cal*r).toFixed(1),prot:+(_fSel.prot*r).toFixed(1),carb:+(_fSel.carb*r).toFixed(1),fat:+(_fSel.fat*r).toFixed(1),meal,date:TODAY};
+  }
+  S.foodLogs.push(lg); closeModal(); toast('Makanan berhasil ditambahkan!'); pgMakanan(uc());
+}
+function delFL(id){S.foodLogs=S.foodLogs.filter(l=>l.id!==id);toast('Dihapus','info');pgMakanan(uc());}
+function addWater(ml){S.waterLogs.push({id:'wl_'+Date.now(),uid:S.user.id,ml,date:TODAY});toast('+'+ml+'ml air');pgMakanan(uc());}
+
+// --- DATABASE ---
+function pgDatabase(el){
+  setUTitle('Database Makanan','Nilai nutrisi lengkap');
+  const cats=['Semua',...new Set(S.foods.map(f=>f.cat))];
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:14px">
+<div class="wcard" style="display:flex;gap:8px;flex-wrap:wrap;padding:11px">
+  <div style="position:relative;flex:1;min-width:170px"><span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:12px">&#128269;</span><input type="text" id="db-q" class="fi" style="padding-left:30px" placeholder="Cari makanan..." oninput="renderDB()"></div>
+  <select id="db-cat" class="fi" style="width:auto;flex-shrink:0" onchange="renderDB()">${cats.map(c=>`<option>${c}</option>`).join('')}</select>
+</div>
+<div class="wcard" style="padding:0;overflow:hidden">
+  <div id="db-cnt" style="padding:9px 15px;border-bottom:1px solid #f9fafb;font-size:11px;font-weight:600;color:#6b7280">${S.foods.length} makanan</div>
+  <div style="overflow-x:auto"><table style="width:100%;font-size:13px;min-width:460px">
+    <thead><tr style="background:#f9fafb;border-bottom:1px solid #f3f4f6;text-align:left">
+      <th style="padding:9px 15px;font-size:11px;color:#9ca3af;font-weight:600">Nama</th>
+      <th style="padding:9px;font-size:11px;color:#9ca3af;font-weight:600">Kategori</th>
+      <th style="padding:9px;font-size:11px;color:#9ca3af;font-weight:600">Porsi</th>
+      <th style="padding:9px;font-size:11px;color:#9ca3af;font-weight:600">Kalori</th>
+      <th style="padding:9px;font-size:11px;color:#9ca3af;font-weight:600">Protein</th>
+      <th style="padding:9px;font-size:11px;color:#9ca3af;font-weight:600">Label</th>
+    </tr></thead>
+    <tbody id="db-tbody"></tbody>
+  </table></div>
+</div>
+</div>`;
+  renderDB();
+}
+const catClr={Protein:'green',Karbohidrat:'orange',Sayuran:'blue',Buah:'purple',Camilan:'yellow'};
+function renderDB(){
+  const q=(document.getElementById('db-q')?.value||'').toLowerCase();
+  const cat=document.getElementById('db-cat')?.value||'Semua';
+  const filt=S.foods.filter(f=>(cat==='Semua'||f.cat===cat)&&f.name.toLowerCase().includes(q));
+  const tb=document.getElementById('db-tbody');
+  if(!tb)return;
+  tb.innerHTML=filt.map(f=>`<tr class="trow" style="border-bottom:1px solid #f9fafb">
+<td style="padding:9px 15px;font-weight:500;color:#1f2937">${f.name}</td>
+<td style="padding:9px">${bdg(f.cat,catClr[f.cat]||'gray')}</td>
+<td style="padding:9px;font-size:11px;color:#9ca3af">${f.srv}g</td>
+<td style="padding:9px;font-weight:700;color:#ea580c">${f.cal}</td>
+<td style="padding:9px;color:#16a34a;font-weight:500">${f.prot}g</td>
+<td style="padding:9px">${f.hp?bdg('High Protein','green'):''}</td>
+</tr>`).join('')+(filt.length===0?'<tr><td colspan="6" style="padding:28px;text-align:center;color:#9ca3af">Tidak ditemukan</td></tr>':'');
+  const c=document.getElementById('db-cnt');if(c)c.textContent=filt.length+' makanan';
+}
+
+// --- MENU MINGGUAN ---
+function pgMenu(el){
+  setUTitle('Menu Mingguan');
+  el.innerHTML=`<div class="fade-in" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:11px">
+${Object.entries(DAYS).map(([k,n])=>`<div class="wcard" style="padding:0;overflow:hidden">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:linear-gradient(135deg,#166534,#16a34a)">
+  <span style="color:#fff;font-weight:700;font-size:13px">${n}</span>
+  <button onclick="openEditMenu('${k}','user')" style="color:rgba(255,255,255,.8);background:none;border:none;cursor:pointer">&#9998;</button>
+</div>
+<div style="padding:10px;display:flex;flex-direction:column;gap:7px">
+${Object.entries(MEALS).map(([mk,ml])=>`<div>
+  <div style="font-size:10px;font-weight:600;color:#9ca3af;text-transform:uppercase">${ml}</div>
+  <div style="font-size:11px;color:#374151;margin-top:1px;line-height:1.4">${S.menu[k]?.[mk]||'&mdash;'}</div>
+</div>`).join('')}
+</div>
+</div>`).join('')}
+</div>`;
+}
+function openEditMenu(key,ctx){
+  openModal('Edit Menu '+DAYS[key],`<div style="display:flex;flex-direction:column;gap:11px">
+${Object.entries(MEALS).map(([mk,ml])=>`<div><label class="fl">${ml}</label><input type="text" id="em-${mk}" class="fi" value="${S.menu[key]?.[mk]||''}" placeholder="Nasi + Ayam + Sayur"></div>`).join('')}
+<div style="display:flex;gap:8px">
+<button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="saveMenu('${key}','${ctx}')">&#128190; Simpan</button>
+<button class="btn btn-md btn-sec" onclick="closeModal()">Batal</button>
+</div>
+</div>`);
+}
+function saveMenu(key,ctx){
+  S.menu[key]={};
+  Object.keys(MEALS).forEach(mk=>{S.menu[key][mk]=document.getElementById('em-'+mk)?.value||'';});
+  closeModal(); toast('Menu diperbarui!');
+  if(ctx==='admin') pgAdminMenu(document.getElementById('a-content'));
+  else pgMenu(uc());
+}
+
+// --- OLAHRAGA ---
+function pgOlahraga(el){
+  setUTitle('Log Olahraga');
+  const uLogs=S.exLogs.filter(l=>l.uid===S.user.id).sort((a,b)=>b.date.localeCompare(a.date));
+  const td=uLogs.filter(l=>l.date===TODAY);
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+${[{v:sum(td,'burned'),l:'kkal terbakar',c:'#a855f7'},{v:sum(td,'dur'),l:'menit aktif',c:'#16a34a'},{v:td.length,l:'aktivitas',c:'#f97316'}].map(s=>`<div class="scard" style="text-align:center;border-top:4px solid ${s.c}">
+  <div style="font-size:22px;font-weight:700;color:${s.c}">${s.v}</div>
+  <div style="font-size:11px;color:#9ca3af;margin-top:2px">${s.l}</div>
+</div>`).join('')}
+</div>
+<button class="btn btn-md btn-p" onclick="openExModal()">+ Tambah Olahraga</button>
+<div class="wcard" style="padding:0;overflow:hidden">
+  <div style="padding:11px 15px;border-bottom:1px solid #f9fafb;font-size:13px;font-weight:700;color:#1f2937">Riwayat Olahraga</div>
+  ${uLogs.length===0?'<div style="padding:40px;text-align:center;color:#9ca3af;font-size:13px">Belum ada log olahraga</div>':
+    `<div>${uLogs.map(lg=>`<div class="trow" style="display:flex;align-items:center;justify-content:space-between;padding:10px 15px;border-bottom:1px solid #f9fafb;gap:8px">
+  <div style="display:flex;align-items:center;gap:9px;min-width:0;flex:1">
+    <div style="width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:${lg.type==='cardio'?'#fef3c7':lg.type==='strength'?'#dcfce7':'#dbeafe'}">
+      ${lg.type==='cardio'?'&#127939;':lg.type==='strength'?'&#128170;':'&#129496;'}
+    </div>
+    <div style="min-width:0">
+      <div style="font-size:12px;font-weight:500;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${lg.name}</div>
+      <div style="font-size:10px;color:#9ca3af">${lg.dur} menit &middot; ${lg.date===TODAY?'Hari ini':lg.date===YDAY?'Kemarin':lg.date}</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
+    ${bdg(lg.burned+' kkal','purple')}
+    <button onclick="delEX('${lg.id}')" style="color:#d1d5db;background:none;border:none;cursor:pointer;font-size:13px">&#128465;</button>
+  </div>
+</div>`).join('')}</div>`}
+</div>
+</div>`;
+}
+function openExModal(){
+  openModal('Tambah Olahraga',`<div style="display:flex;flex-direction:column;gap:11px">
+<div><label class="fl">Aktivitas*</label><input type="text" id="ex-name" class="fi" list="exlist" placeholder="Pilih atau ketik..."><datalist id="exlist">${EXLIST.map(e=>`<option value="${e}">`).join('')}</datalist></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+  <div><label class="fl">Tipe</label><select id="ex-type" class="fi"><option value="cardio">Kardio</option><option value="strength">Kekuatan</option><option value="flexibility">Fleksibilitas</option><option value="sports">Olahraga</option></select></div>
+  <div><label class="fl">Intensitas</label><select id="ex-int" class="fi"><option value="low">Ringan</option><option value="medium" selected>Sedang</option><option value="high">Berat</option></select></div>
+  <div><label class="fl">Durasi (menit)*</label><input type="number" id="ex-dur" class="fi" value="30" min="1"></div>
+  <div><label class="fl">Kalori (opsional)</label><input type="number" id="ex-cal" class="fi" placeholder="estimasi otomatis"></div>
+</div>
+<div style="display:flex;gap:8px">
+  <button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="submitEx()">&#10003; Simpan</button>
+  <button class="btn btn-md btn-sec" onclick="closeModal()">Batal</button>
+</div>
+</div>`);
+}
+function submitEx(){
+  const name=(document.getElementById('ex-name')?.value||'').trim();
+  const dur=+document.getElementById('ex-dur')?.value;
+  if(!name||!dur){toast('Nama dan durasi wajib','error');return;}
+  const type=document.getElementById('ex-type')?.value||'cardio';
+  const int=document.getElementById('ex-int')?.value||'medium';
+  const calMap={cardio:8,strength:5,flexibility:3,sports:7};
+  const intMap={low:.7,medium:1,high:1.4};
+  const burned=+document.getElementById('ex-cal')?.value||Math.round((calMap[type]||6)*dur*(intMap[int]||1));
+  S.exLogs.push({id:'el_'+Date.now(),uid:S.user.id,name,type,dur,burned,int,date:TODAY});
+  closeModal(); toast('Log olahraga ditambahkan!'); pgOlahraga(uc());
+}
+function delEX(id){S.exLogs=S.exLogs.filter(l=>l.id!==id);toast('Dihapus','info');pgOlahraga(uc());}
+
+// --- SCANNER ---
+function pgScanner(el){
+  setUTitle('Scanner Makanan','Cari estimasi nutrisi dengan cepat');
+  el.innerHTML=`<div class="fade-in" style="max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
+<div class="wcard" style="text-align:center">
+  <div style="font-size:44px;margin-bottom:11px">&#128269;</div>
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:4px">Cari Nilai Nutrisi</h3>
+  <p style="font-size:13px;color:#9ca3af;margin-bottom:14px">Ketik nama makanan untuk mencari</p>
+  <div style="display:flex;gap:8px">
+    <input type="text" id="sc-q" class="fi" placeholder="Contoh: nasi putih..." onkeydown="if(event.key==='Enter')doScan()">
+    <button class="btn btn-md btn-p" onclick="doScan()">Cari</button>
+  </div>
+</div>
+<div id="sc-results"></div>
+<div id="sc-detail"></div>
+</div>`;
+}
+function doScan(){
+  const q=(document.getElementById('sc-q')?.value||'').toLowerCase().trim();
+  if(!q)return;
+  const res=S.foods.filter(f=>f.name.toLowerCase().includes(q));
+  const el=document.getElementById('sc-results');
+  if(!el)return;
+  if(!res.length){el.innerHTML='<div style="text-align:center;color:#9ca3af;font-size:13px;padding:18px 0">Makanan tidak ditemukan</div>';return;}
+  el.innerHTML=`<div class="wcard" style="padding:0;overflow:hidden">${res.map(f=>`<button onclick="selScan('${f.id}')" style="width:100%;text-align:left;padding:11px 15px;background:#fff;border:none;cursor:pointer;border-bottom:1px solid #f9fafb;display:flex;justify-content:space-between;align-items:center" class="trow">
+<div><div style="font-weight:500;color:#1f2937;font-size:12px">${f.name}</div><div style="font-size:10px;color:#9ca3af">${f.cat} &middot; ${f.srv}g</div></div>
+<div style="text-align:right"><div style="font-weight:700;color:#ea580c;font-size:12px">${f.cal} kkal</div><div style="font-size:10px;color:#16a34a">P:${f.prot}g</div></div>
+</button>`).join('')}</div>`;
+}
+function selScan(id){
+  const f=S.foods.find(x=>x.id===id);if(!f)return;
+  document.getElementById('sc-detail').innerHTML=`<div class="wcard" style="border:2px solid #bbf7d0">
+<h3 style="font-weight:700;color:#1f2937;margin-bottom:11px">${f.name}</h3>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px">
+${[{l:'Kalori',v:f.cal+'kkal',c:'#f97316'},{l:'Protein',v:f.prot+'g',c:'#16a34a'},{l:'Karbo',v:f.carb+'g',c:'#3b82f6'},{l:'Lemak',v:f.fat+'g',c:'#f59e0b'}].map(s=>`<div style="background:#f9fafb;border-radius:9px;padding:7px;text-align:center"><div style="font-weight:700;font-size:11px;color:${s.c}">${s.v}</div><div style="font-size:10px;color:#9ca3af">${s.l}</div></div>`).join('')}
+</div>
+<div style="display:flex;gap:8px">
+  <select id="sc-meal" class="fi" style="width:auto;flex-shrink:0"><option value="breakfast">Sarapan</option><option value="lunch" selected>Makan Siang</option><option value="dinner">Makan Malam</option><option value="snack">Camilan</option></select>
+  <button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="addScan('${f.id}')">+ Tambah ke Tracker</button>
+</div>
+</div>`;
+}
+function addScan(id){
+  const f=S.foods.find(x=>x.id===id);if(!f)return;
+  const mt=document.getElementById('sc-meal')?.value||'lunch';
+  S.foodLogs.push({id:'fl_'+Date.now(),uid:S.user.id,name:f.name,wg:f.srv,cal:f.cal,prot:f.prot,carb:f.carb,fat:f.fat,meal:mt,date:TODAY});
+  toast(f.name+' ditambahkan ke Tracker!');
+  document.getElementById('sc-detail').innerHTML='';
+}
+
+// --- DONASI ---
+const SC={active:'green',approved:'blue',pending:'yellow',closed:'gray'};
+const SL={active:'Aktif',approved:'Disetujui',pending:'Menunggu',closed:'Selesai'};
+function pgDonasi(el){
+  setUTitle('Campaign Donasi','Ikut berkontribusi melalui donasi');
+  const vis=S.campaigns.filter(c=>c.status==='active'||c.status==='approved');
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:18px">
+<div style="border-radius:16px;padding:18px;color:#fff;background:linear-gradient(135deg,#166534,#16a34a)">
+  <h3 style="font-size:19px;font-weight:700;margin-bottom:4px">&#10084; Bersama Kita Lebih Kuat</h3>
+  <p style="color:#bbf7d0;font-size:13px">Setiap donasi kecilmu berarti besar bagi mereka yang membutuhkan.</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+${vis.map(c=>`<div class="card-hover" style="background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column">
+<div style="padding:18px;flex:1">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:11px"><span style="font-size:38px">${c.img}</span>${bdg(SL[c.status],SC[c.status])}</div>
+  ${bdg(c.cat,'gray')}
+  <h3 style="font-weight:700;color:#1f2937;margin:7px 0;font-size:14px">${c.title}</h3>
+  <p style="font-size:11px;color:#6b7280;margin-bottom:12px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${c.desc}</p>
+  <div style="font-size:11px;color:#6b7280;display:flex;flex-direction:column;gap:3px">
+    <div>&#128101; ${c.benName}</div>
+    <div>&#128205; ${c.benLoc}</div>
+    <div>&#128197; ${c.start} &ndash; ${c.end}</div>
+  </div>
+</div>
+<div style="padding:0 18px 14px;display:flex;gap:7px">
+  <button class="btn btn-sm btn-out" style="flex:1;justify-content:center" onclick="nav('donasi-detail',{cid:'${c.id}'})">&#128065; Detail</button>
+  ${c.link?`<a href="${c.link}" target="_blank" rel="noopener noreferrer" style="flex:1;text-decoration:none"><button class="btn btn-sm btn-p" style="width:100%;justify-content:center">&#10084; Donasi &rarr;</button></a>`:''}
+</div>
+</div>`).join('')}
+${vis.length===0?'<div style="grid-column:1/-1;padding:40px;text-align:center;color:#9ca3af">Belum ada campaign aktif</div>':''}
+</div>
+</div>`;
+}
+function pgDonasiDetail(el){
+  setUTitle('Detail Campaign');
+  const id=S.params?.cid;
+  const c=S.campaigns.find(x=>x.id===id);
+  if(!c){el.innerHTML='<p style="color:#9ca3af">Campaign tidak ditemukan.</p>';return;}
+  el.innerHTML=`<div class="fade-in" style="max-width:500px;margin:0 auto">
+<button class="btn btn-sm btn-gh" onclick="nav('donasi')" style="margin-bottom:14px">&#8592; Kembali</button>
+<div class="wcard" style="padding:0;overflow:hidden">
+<div style="padding:22px">
+  <div style="display:flex;gap:14px;margin-bottom:18px">
+    <span style="font-size:44px;flex-shrink:0">${c.img}</span>
+    <div><div style="display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap">${bdg(SL[c.status],SC[c.status])} ${bdg(c.cat,'purple')}</div><h2 style="font-size:19px;font-weight:700;color:#1f2937">${c.title}</h2></div>
+  </div>
+  <div style="background:#f9fafb;border-radius:11px;padding:14px;margin-bottom:18px"><p style="font-size:13px;color:#374151;line-height:1.6">${c.desc}</p></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px">
+${[{l:'Penerima',v:c.benName,i:'&#128101;'},{l:'Lokasi',v:c.benLoc,i:'&#128205;'},{l:'Mulai',v:c.start,i:'&#128197;'},{l:'Berakhir',v:c.end,i:'&#128197;'}].map(it=>`<div style="background:#f9fafb;border-radius:10px;padding:10px;display:flex;gap:7px"><span style="font-size:14px">${it.i}</span><div><div style="font-size:10px;color:#9ca3af">${it.l}</div><div style="font-size:12px;font-weight:600;color:#374151">${it.v}</div></div></div>`).join('')}
+  </div>
+  ${c.link?`<a href="${c.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
+    <button style="width:100%;padding:15px;border-radius:11px;font-weight:700;color:#fff;font-size:15px;border:none;cursor:pointer;background:linear-gradient(135deg,#16a34a,#15803d)">&#10084; Donasi Sekarang &rarr;</button>
+  </a>
+  <div style="display:flex;gap:8px;margin-top:10px;justify-content:center;flex-wrap:wrap">
+    <a href="https://wa.me/?text=${encodeURIComponent(c.title+' '+c.link)}" target="_blank" style="text-decoration:none"><button class="btn btn-sm" style="background:#22c55e;color:#fff;border:none">&#128241; WhatsApp</button></a>
+    <button class="btn btn-sm btn-sec" onclick="copyLink('${c.link}')">&#128203; Salin Link</button>
+  </div>`:
+  '<div style="background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:14px;text-align:center;font-size:13px;color:#a16207">Link donasi belum tersedia. Campaign menunggu persetujuan.</div>'}
+</div>
+</div>
+</div>`;
+}
+function copyLink(url){try{navigator.clipboard.writeText(url).then(()=>toast('Link disalin!'));}catch(e){toast('Salin manual: '+url,'info');}}
+
+// ============================================================
+// ADMIN PAGES
+// ============================================================
+const ac=()=>document.getElementById('a-content');
+function setATitle(t){document.getElementById('a-title').textContent=t;}
+function renderAdminPage(p){
+  const m={'admin-dashboard':pgAdminDash,'admin-makanan':pgAdminMakanan,'admin-artikel':pgAdminArtikel,'admin-menu':pgAdminMenu,'admin-moderasi':pgAdminMod,'admin-donasi':pgAdminDonasi};
+  (m[p]||function(el){el.innerHTML='<p>404</p>';})(ac());
+}
+
+// --- ADMIN DASHBOARD ---
+function pgAdminDash(el){
+  setATitle('Admin Dashboard');
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+${[{e:'&#128101;',l:'Total Pengguna',v:USERS.length+S.extraUsers.length,c:'#3b82f6'},
+   {e:'&#127869;',l:'Database Makanan',v:S.foods.length,c:'#f97316'},
+   {e:'&#128196;',l:'Artikel Published',v:S.articles.filter(a=>a.status==='published').length,c:'#16a34a'},
+   {e:'&#10084;',l:'Campaign',v:S.campaigns.length,c:'#a855f7'}].map(s=>`<div class="card-hover scard" style="border-top:4px solid ${s.c}">
+  <div style="font-size:22px;margin-bottom:4px">${s.e}</div>
+  <div style="font-size:22px;font-weight:700;color:#1f2937">${s.v}</div>
+  <div style="font-size:11px;color:#6b7280;margin-top:2px">${s.l}</div>
+</div>`).join('')}
+</div>
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:14px">
+<div class="wcard">
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:14px">Aktivitas 7 Hari Terakhir</h3>
+  <canvas id="act-chart" style="max-height:190px"></canvas>
+</div>
+<div class="wcard">
+  <h3 style="font-weight:700;color:#1f2937;margin-bottom:12px">Aksi Cepat</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px">
+  ${[{l:'Kelola Makanan',p:'admin-makanan',e:'&#127869;'},{l:'Kelola Artikel',p:'admin-artikel',e:'&#128196;'},{l:'Kampanye',p:'admin-donasi',e:'&#10084;'},{l:'Moderasi',p:'admin-moderasi',e:'&#128737;'}].map(a=>`<button onclick="nav('${a.p}')" style="display:flex;align-items:center;gap:5px;padding:9px;background:#f9fafb;border-radius:9px;border:none;cursor:pointer;font-size:11px;font-weight:500;color:#374151;text-align:left"><span style="font-size:17px">${a.e}</span>${a.l}</button>`).join('')}
+  </div>
+  <div style="padding:12px;background:#eff6ff;border-radius:11px">
+    <div style="font-size:12px;font-weight:700;color:#1e40af;margin-bottom:7px">Perlu Perhatian</div>
+    <div style="font-size:11px;color:#1d4ed8;display:flex;flex-direction:column;gap:3px">
+      <div>&bull; ${S.campaigns.filter(c=>c.status==='pending').length} campaign menunggu</div>
+      <div>&bull; ${S.comments.filter(c=>c.status==='pending').length} komentar belum dimoderasi</div>
+      <div>&bull; ${S.articles.filter(a=>a.status==='draft').length} artikel masih draft</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>`;
+  setTimeout(()=>{try{new Chart(document.getElementById('act-chart'),{type:'bar',data:{labels:ACT_C.map(d=>d.d),datasets:[{label:'Pengguna',data:ACT_C.map(d=>d.u),backgroundColor:'#3b82f6',borderRadius:3},{label:'Log Makanan',data:ACT_C.map(d=>d.f),backgroundColor:'#16a34a',borderRadius:3}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f1f5f9'}}}}});}catch(e){}},80);
+}
+
+// --- ADMIN MAKANAN ---
+function pgAdminMakanan(el){
+  setATitle('Kelola Database Makanan');
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:13px">
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <div style="position:relative;flex:1;min-width:190px"><span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:12px">&#128269;</span><input type="text" id="am-q" class="fi" style="padding-left:30px" placeholder="Cari makanan..." oninput="renderAMF()"></div>
+  <button class="btn btn-md btn-p" onclick="openAFModal(null)">+ Tambah Makanan</button>
+  <span id="am-cnt" class="badge b-gray">${S.foods.length} item</span>
+</div>
+<div class="wcard" style="padding:0;overflow:hidden">
+<div style="overflow-x:auto"><table style="width:100%;font-size:12px;min-width:500px">
+  <thead><tr style="background:#f9fafb;border-bottom:1px solid #f3f4f6;text-align:left">
+    <th style="padding:9px 14px;font-size:10px;color:#9ca3af;font-weight:600">Nama</th>
+    <th style="padding:9px;font-size:10px;color:#9ca3af;font-weight:600">Kategori</th>
+    <th style="padding:9px;font-size:10px;color:#9ca3af;font-weight:600">Porsi</th>
+    <th style="padding:9px;font-size:10px;color:#9ca3af;font-weight:600">Kalori</th>
+    <th style="padding:9px;font-size:10px;color:#9ca3af;font-weight:600">Protein</th>
+    <th style="padding:9px;font-size:10px;color:#9ca3af;font-weight:600">Aksi</th>
+  </tr></thead>
+  <tbody id="am-tbody"></tbody>
+</table></div>
+</div>
+</div>`;
+  renderAMF();
+}
+function renderAMF(){
+  const q=(document.getElementById('am-q')?.value||'').toLowerCase();
+  const filt=S.foods.filter(f=>f.name.toLowerCase().includes(q));
+  const tb=document.getElementById('am-tbody');if(!tb)return;
+  tb.innerHTML=filt.map(f=>`<tr class="trow" style="border-bottom:1px solid #f9fafb">
+<td style="padding:9px 14px"><div style="font-weight:500;color:#1f2937">${f.name}</div>${f.hp?bdg('High Protein','green'):''}</td>
+<td style="padding:9px">${bdg(f.cat,catClr[f.cat]||'gray')}</td>
+<td style="padding:9px;font-size:11px;color:#9ca3af">${f.srv}g</td>
+<td style="padding:9px;font-weight:700;color:#ea580c">${f.cal}</td>
+<td style="padding:9px;color:#16a34a">${f.prot}g</td>
+<td style="padding:9px"><div style="display:flex;gap:4px">
+  <button onclick="openAFModal('${f.id}')" style="padding:5px;border-radius:7px;background:#eff6ff;color:#2563eb;border:none;cursor:pointer">&#9998;</button>
+  <button onclick="delAF('${f.id}')" style="padding:5px;border-radius:7px;background:#fef2f2;color:#dc2626;border:none;cursor:pointer">&#128465;</button>
+</div></td>
+</tr>`).join('')+(filt.length===0?'<tr><td colspan="6" style="padding:28px;text-align:center;color:#9ca3af">Tidak ditemukan</td></tr>':'');
+  const c=document.getElementById('am-cnt');if(c)c.textContent=filt.length+' item';
+}
+function openAFModal(id){
+  const f=id?S.foods.find(x=>x.id===id):null;
+  const cats=['Protein','Karbohidrat','Sayuran','Buah','Camilan','Makanan Tradisional'];
+  openModal(f?'Edit Makanan':'Tambah Makanan',`<div style="display:flex;flex-direction:column;gap:11px">
+<div><label class="fl">Nama*</label><input type="text" id="af-name" class="fi" value="${f?.name||''}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+  <div><label class="fl">Kategori</label><select id="af-cat" class="fi">${cats.map(c=>`<option value="${c}" ${f?.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+  <div><label class="fl">Porsi (g)</label><input type="number" id="af-srv" class="fi" value="${f?.srv||100}" min="1"></div>
+  <div><label class="fl">Kalori*</label><input type="number" id="af-cal" class="fi" value="${f?.cal||''}" min="0"></div>
+  <div><label class="fl">Protein (g)</label><input type="number" id="af-prot" class="fi" value="${f?.prot||''}" min="0"></div>
+  <div><label class="fl">Karbo (g)</label><input type="number" id="af-carb" class="fi" value="${f?.carb||''}" min="0"></div>
+  <div><label class="fl">Lemak (g)</label><input type="number" id="af-fat" class="fi" value="${f?.fat||''}" min="0"></div>
+</div>
+<label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer"><input type="checkbox" id="af-hp" ${f?.hp?'checked':''}> High Protein</label>
+<div style="display:flex;gap:8px">
+  <button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="saveAF('${id||''}')">&#128190; Simpan</button>
+  <button class="btn btn-md btn-sec" onclick="closeModal()">Batal</button>
+</div>
+</div>`);
+}
+function saveAF(id){
+  const name=(document.getElementById('af-name')?.value||'').trim();
+  const cal=+document.getElementById('af-cal')?.value;
+  if(!name||!cal){toast('Nama dan kalori wajib','error');return;}
+  const d={name,cat:document.getElementById('af-cat')?.value||'Protein',srv:+document.getElementById('af-srv')?.value||100,cal,prot:+document.getElementById('af-prot')?.value||0,carb:+document.getElementById('af-carb')?.value||0,fat:+document.getElementById('af-fat')?.value||0,hp:document.getElementById('af-hp')?.checked||false};
+  if(id){S.foods=S.foods.map(f=>f.id===id?{...f,...d}:f);toast('Makanan diperbarui!');}
+  else{S.foods.push({...d,id:'f_'+Date.now()});toast('Makanan ditambahkan!');}
+  closeModal(); pgAdminMakanan(ac());
+}
+function delAF(id){S.foods=S.foods.filter(f=>f.id!==id);toast('Dihapus','info');pgAdminMakanan(ac());}
+
+// --- ADMIN ARTIKEL ---
+function pgAdminArtikel(el){
+  setATitle('Kelola Artikel');
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:13px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+  <span style="font-size:13px;color:#6b7280">${S.articles.length} artikel</span>
+  <button class="btn btn-md btn-p" onclick="openArtModal(null)">+ Tulis Artikel</button>
+</div>
+<div id="art-list" style="display:flex;flex-direction:column;gap:9px"></div>
+</div>`;
+  renderArtList();
+}
+function renderArtList(){
+  const el=document.getElementById('art-list');if(!el)return;
+  el.innerHTML=S.articles.map(a=>`<div class="wcard" style="display:flex;align-items:flex-start;gap:11px;padding:13px 15px">
+<div style="flex:1;min-width:0">
+  <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap">
+    <h3 style="font-weight:700;color:#1f2937;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.title}</h3>
+    ${bdg(a.status==='published'?'Tayang':'Draft',a.status==='published'?'green':'gray')}
+  </div>
+  <p style="font-size:11px;color:#6b7280;margin-bottom:3px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${a.excerpt}</p>
+  <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:#9ca3af">
+    <span>${a.cat}</span><span>&#128065; ${a.views}</span>
+  </div>
+</div>
+<div style="display:flex;gap:4px;flex-shrink:0">
+  <button onclick="toggleArt('${a.id}')" style="padding:3px 7px;border-radius:7px;font-size:11px;border:none;cursor:pointer;${a.status==='published'?'background:#fef9c3;color:#a16207':'background:#dcfce7;color:#15803d'}">${a.status==='published'?'Unpublish':'Publish'}</button>
+  <button onclick="openArtModal('${a.id}')" style="padding:5px;border-radius:7px;background:#eff6ff;color:#2563eb;border:none;cursor:pointer">&#9998;</button>
+  <button onclick="delArt('${a.id}')" style="padding:5px;border-radius:7px;background:#fef2f2;color:#dc2626;border:none;cursor:pointer">&#128465;</button>
+</div>
+</div>`).join('');
+}
+function toggleArt(id){S.articles=S.articles.map(a=>a.id===id?{...a,status:a.status==='published'?'draft':'published'}:a);toast('Status diperbarui');renderArtList();}
+function delArt(id){S.articles=S.articles.filter(a=>a.id!==id);toast('Dihapus','info');renderArtList();}
+function openArtModal(id){
+  const a=id?S.articles.find(x=>x.id===id):null;
+  const cats=['Nutrisi','Olahraga','Kesehatan Umum','Hidrasi','Gaya Hidup'];
+  openModal(a?'Edit Artikel':'Tulis Artikel',`<div style="display:flex;flex-direction:column;gap:11px">
+<div><label class="fl">Judul*</label><input type="text" id="aa-t" class="fi" value="${a?.title||''}"></div>
+<div><label class="fl">Ringkasan</label><textarea id="aa-ex" class="fi" rows="3" style="resize:none">${a?.excerpt||''}</textarea></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+  <div><label class="fl">Kategori</label><select id="aa-cat" class="fi">${cats.map(c=>`<option ${a?.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+  <div><label class="fl">Status</label><select id="aa-st" class="fi"><option value="draft" ${(!a||a.status==='draft')?'selected':''}>Draft</option><option value="published" ${a?.status==='published'?'selected':''}>Publish</option></select></div>
+</div>
+<div><label class="fl">Tags (pisah koma)</label><input type="text" id="aa-tags" class="fi" value="${(a?.tags||[]).join(', ')}" placeholder="protein, gizi"></div>
+<div style="display:flex;gap:8px">
+  <button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="saveArt('${id||''}')">&#128190; Simpan</button>
+  <button class="btn btn-md btn-sec" onclick="closeModal()">Batal</button>
+</div>
+</div>`);
+}
+function saveArt(id){
+  const title=(document.getElementById('aa-t')?.value||'').trim();
+  if(!title){toast('Judul wajib','error');return;}
+  const st=document.getElementById('aa-st')?.value||'draft';
+  const d={title,excerpt:document.getElementById('aa-ex')?.value||'',cat:document.getElementById('aa-cat')?.value||'Nutrisi',tags:(document.getElementById('aa-tags')?.value||'').split(',').map(t=>t.trim()).filter(Boolean),status:st,date:st==='published'?new Date().toISOString().split('T')[0]:null};
+  if(id){S.articles=S.articles.map(a=>a.id===id?{...a,...d}:a);}
+  else{S.articles.push({...d,id:'a_'+Date.now(),views:0});}
+  toast('Tersimpan!'); closeModal(); renderArtList();
+}
+
+// --- ADMIN MENU ---
+function pgAdminMenu(el){
+  setATitle('Atur Menu Mingguan');
+  el.innerHTML=`<div class="fade-in" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:11px">
+${Object.entries(DAYS).map(([k,n])=>`<div class="wcard" style="padding:0;overflow:hidden">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:#1e293b">
+  <span style="color:#fff;font-weight:700;font-size:13px">${n}</span>
+  <button onclick="openEditMenu('${k}','admin')" style="color:#94a3b8;background:none;border:none;cursor:pointer">&#9998;</button>
+</div>
+<div style="padding:10px;display:flex;flex-direction:column;gap:7px">
+${Object.entries(MEALS).map(([mk,ml])=>`<div>
+  <div style="font-size:10px;font-weight:600;color:#9ca3af;text-transform:uppercase">${ml}</div>
+  <div style="font-size:11px;color:#374151;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${S.menu[k]?.[mk]||'&mdash;'}</div>
+</div>`).join('')}
+</div>
+</div>`).join('')}
+</div>`;
+}
+
+// --- ADMIN MODERASI ---
+let _modF='pending';
+function pgAdminMod(el){
+  setATitle('Moderasi Konten');
+  const cnt={all:S.comments.length,pending:S.comments.filter(c=>c.status==='pending').length,approved:S.comments.filter(c=>c.status==='approved').length,rejected:S.comments.filter(c=>c.status==='rejected').length};
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:13px">
+<div style="display:flex;gap:7px;flex-wrap:wrap">
+${Object.entries({all:'Semua',pending:'Menunggu',approved:'Disetujui',rejected:'Ditolak'}).map(([k,l])=>`<button onclick="setModF('${k}')" style="padding:7px 11px;border-radius:10px;font-size:12px;font-weight:500;border:1px solid;cursor:pointer;${_modF===k?'background:#1e293b;color:#fff;border-color:#1e293b':'background:#fff;border-color:#e5e7eb;color:#374151'}">${l} (${cnt[k]})</button>`).join('')}
+</div>
+<div id="mod-list"></div>
+</div>`;
+  renderModList();
+}
+function setModF(f){_modF=f;pgAdminMod(ac());}
+function renderModList(){
+  const el=document.getElementById('mod-list');if(!el)return;
+  const filt=S.comments.filter(c=>_modF==='all'||c.status===_modF);
+  if(!filt.length){el.innerHTML='<div class="wcard" style="padding:36px;text-align:center;color:#9ca3af">Tidak ada komentar</div>';return;}
+  el.innerHTML=`<div style="display:flex;flex-direction:column;gap:9px">${filt.map(c=>`<div class="wcard" style="display:flex;align-items:flex-start;gap:10px;padding:13px 15px">
+<div style="width:26px;height:26px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#374151;flex-shrink:0">${c.uname[0]}</div>
+<div style="flex:1;min-width:0">
+  <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap">
+    <span style="font-weight:600;color:#374151;font-size:13px">${c.uname}</span>
+    ${bdg(c.status==='pending'?'Menunggu':c.status==='approved'?'Disetujui':'Ditolak',c.status==='pending'?'orange':c.status==='approved'?'green':'red')}
+  </div>
+  <p style="font-size:12px;color:#374151;margin-bottom:3px">${c.content}</p>
+  <span style="font-size:10px;color:#9ca3af">${c.at}</span>
+</div>
+<div style="display:flex;gap:4px;flex-shrink:0">
+  ${c.status==='pending'?`<button onclick="approveCmt('${c.id}')" style="padding:5px;border-radius:7px;background:#dcfce7;color:#15803d;border:none;cursor:pointer">&#10003;</button>
+  <button onclick="rejectCmt('${c.id}')" style="padding:5px;border-radius:7px;background:#fef2f2;color:#dc2626;border:none;cursor:pointer">&times;</button>`:''}
+  <button onclick="delCmt('${c.id}')" style="padding:5px;border-radius:7px;background:#fef2f2;color:#dc2626;border:none;cursor:pointer">&#128465;</button>
+</div>
+</div>`).join('')}</div>`;
+}
+function approveCmt(id){S.comments=S.comments.map(c=>c.id===id?{...c,status:'approved'}:c);toast('Disetujui');renderModList();}
+function rejectCmt(id){S.comments=S.comments.map(c=>c.id===id?{...c,status:'rejected'}:c);toast('Ditolak','info');renderModList();}
+function delCmt(id){S.comments=S.comments.filter(c=>c.id!==id);toast('Dihapus','info');renderModList();}
+
+// --- ADMIN DONASI ---
+let _dF='all';
+function pgAdminDonasi(el){
+  setATitle('Kelola Campaign Donasi');
+  const vis=S.campaigns.filter(c=>_dF==='all'||c.status===_dF);
+  el.innerHTML=`<div class="fade-in" style="display:flex;flex-direction:column;gap:13px">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">
+${Object.entries(SL).map(([k,l])=>`<div class="scard" style="text-align:center;padding:11px">
+  <div style="font-size:18px;font-weight:700;color:#1f2937">${S.campaigns.filter(c=>c.status===k).length}</div>
+  <div style="font-size:11px;color:#9ca3af">${l}</div>
+</div>`).join('')}
+</div>
+<div style="display:flex;gap:7px;flex-wrap:wrap">
+${['all',...Object.keys(SL)].map(fk=>`<button onclick="setDF('${fk}')" style="padding:5px 11px;border-radius:9px;font-size:12px;border:1px solid;cursor:pointer;${_dF===fk?'background:#1e293b;color:#fff;border-color:#1e293b':'background:#fff;border-color:#e5e7eb;color:#374151'}">${fk==='all'?'Semua':SL[fk]}</button>`).join('')}
+</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+${vis.map(c=>`<div class="wcard" style="display:flex;align-items:flex-start;gap:10px;padding:13px 15px">
+<span style="font-size:28px;flex-shrink:0">${c.img}</span>
+<div style="flex:1;min-width:0">
+  <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap">
+    <h3 style="font-weight:700;color:#1f2937;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.title}</h3>
+    ${bdg(SL[c.status],SC[c.status])}
+  </div>
+  <p style="font-size:11px;color:#9ca3af;margin-bottom:3px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${c.desc}</p>
+  <div style="font-size:10px;color:#9ca3af">&#128205; ${c.benLoc} &middot; &#128197; ${c.start}&rarr;${c.end}${c.link?` &middot; <a href="${c.link}" target="_blank" style="color:#2563eb">Link</a>`:''}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">
+  ${c.status==='pending'?`<button class="btn btn-sm btn-p" onclick="approveC('${c.id}')">&#10003; Setujui</button><button class="btn btn-sm btn-dan" onclick="rejectC('${c.id}')">Tolak</button>`:''}
+  ${(c.status==='active'||c.status==='approved')?`<button class="btn btn-sm btn-sec" onclick="closeC('${c.id}')">Tutup</button>`:''}
+  <button class="btn btn-sm btn-sec" onclick="openEditC('${c.id}')">&#9998; Edit</button>
+</div>
+</div>`).join('')}
+</div>
+</div>`;
+}
+function setDF(f){_dF=f;pgAdminDonasi(ac());}
+function approveC(id){S.campaigns=S.campaigns.map(c=>c.id===id?{...c,status:'active'}:c);toast('Campaign disetujui!');pgAdminDonasi(ac());}
+function rejectC(id){S.campaigns=S.campaigns.map(c=>c.id===id?{...c,status:'closed'}:c);toast('Ditolak','info');pgAdminDonasi(ac());}
+function closeC(id){S.campaigns=S.campaigns.map(c=>c.id===id?{...c,status:'closed'}:c);toast('Campaign ditutup');pgAdminDonasi(ac());}
+function openEditC(id){
+  const c=S.campaigns.find(x=>x.id===id);if(!c)return;
+  openModal('Edit Campaign',`<div style="display:flex;flex-direction:column;gap:11px">
+<div><label class="fl">Judul</label><input type="text" id="ec-t" class="fi" value="${c.title}"></div>
+<div><label class="fl">Deskripsi</label><textarea id="ec-d" class="fi" rows="3" style="resize:none">${c.desc}</textarea></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+  <div><label class="fl">Mulai</label><input type="date" id="ec-s" class="fi" value="${c.start}"></div>
+  <div><label class="fl">Berakhir</label><input type="date" id="ec-e" class="fi" value="${c.end}"></div>
+  <div style="grid-column:1/-1"><label class="fl">Status</label><select id="ec-st" class="fi">
+    <option value="pending" ${c.status==='pending'?'selected':''}>Menunggu</option>
+    <option value="approved" ${c.status==='approved'?'selected':''}>Disetujui</option>
+    <option value="active" ${c.status==='active'?'selected':''}>Aktif</option>
+    <option value="closed" ${c.status==='closed'?'selected':''}>Ditutup</option>
+  </select></div>
+</div>
+<div><label class="fl">Penerima</label><input type="text" id="ec-bn" class="fi" value="${c.benName}"></div>
+<div><label class="fl">Lokasi</label><input type="text" id="ec-bl" class="fi" value="${c.benLoc}"></div>
+<div><label class="fl">Link Crowdfunding</label><input type="text" id="ec-lk" class="fi" value="${c.link||''}" placeholder="https://kitabisa.com/..."></div>
+<div style="display:flex;gap:8px">
+  <button class="btn btn-md btn-p" style="flex:1;justify-content:center" onclick="saveEditC('${id}')">&#128190; Simpan</button>
+  <button class="btn btn-md btn-sec" onclick="closeModal()">Batal</button>
+</div>
+</div>`);
+}
+function saveEditC(id){
+  const upd={title:document.getElementById('ec-t')?.value||'',desc:document.getElementById('ec-d')?.value||'',start:document.getElementById('ec-s')?.value||'',end:document.getElementById('ec-e')?.value||'',status:document.getElementById('ec-st')?.value||'pending',benName:document.getElementById('ec-bn')?.value||'',benLoc:document.getElementById('ec-bl')?.value||'',link:document.getElementById('ec-lk')?.value||''};
+  S.campaigns=S.campaigns.map(c=>c.id===id?{...c,...upd}:c);
+  toast('Campaign diperbarui!'); closeModal(); pgAdminDonasi(ac());
+}
+
+// ============================================================
+// INIT
+// ============================================================
+render();
+</script>
+</body>
+</html>
